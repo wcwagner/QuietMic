@@ -1,0 +1,45 @@
+# QuietMic
+
+Low-touch iOS 26 voice recording app that is launched via iPhone's action. This app serves as a PoC MVP demonstrating that with AppIntent's and iOS Shortcuts, it is possible to start an audio recording session *without* ever foregrounding the app or opening the UI.
+
+## Project Structure
+
+```
+.
+├─ project.yml              # XcodeGen configuration (single source of truth)
+├─ Makefile                 # Build automation (gen, build, test, clean)
+├─ Configs/
+│  ├─ Base.xcconfig        # Swift 6, strict/approachable concurrency, shared settings
+│  ├─ Debug.xcconfig
+│  └─ Release.xcconfig
+└─ ios/
+   └─ QuietMic/
+      ├─ Info.plist        # Explicit app metadata (not auto-generated)
+      ├─ QuietMic.entitlements # Siri + background audio permissions
+      ├─ App/              # Core app code (QuietMicApp.swift, etc.)
+      ├─ Features/         # Future: Audio/, Shortcuts/ modules
+      └─ Resources/        # Assets.xcassets
+```
+
+## Development Workflow
+
+```bash
+make gen    # Generate .xcodeproj from project.yml (always run first)
+make build  # Build app with Swift 6 strict concurrency
+make test   # Run unit tests (Swift 6 concurrency issues expected in test targets)
+make clean  # Remove generated project and build artifacts
+```
+
+**Critical**: Always run `make gen` after modifying `project.yml` or switching branches.
+
+## Architecture Principles
+
+**Agent-Intuitive Design**: One obvious place for each concern
+- **Build policy**: Lives in `.xcconfig` files, not YAML
+- **App metadata**: Explicit `Info.plist` and `.entitlements` files
+- **Project wiring**: Single `project.yml` at root
+- **Source organization**: Modular by feature, not by file type
+
+**Swift 6 Complete Concurrency**: All new code must compile with strict concurrency checking enabled. This catches concurrency bugs at compile time.
+
+**XcodeGen Over Xcode**: Project files are generated, not edited by hand. This eliminates merge conflicts and ensures consistency.

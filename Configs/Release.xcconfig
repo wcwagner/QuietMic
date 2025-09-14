@@ -1,0 +1,19 @@
+// Release.xcconfig
+// Release-specific build configuration
+
+#include "Base.xcconfig"
+
+// Release-specific compilation conditions
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) RELEASE
+
+// Release optimization
+SWIFT_COMPILATION_MODE = wholemodule
+
+// Release debug information
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+
+// Disable assertions
+ENABLE_NS_ASSERTIONS = NO
+
+// Product validation
+VALIDATE_PRODUCT = YES

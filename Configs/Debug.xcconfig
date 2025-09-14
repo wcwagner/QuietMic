@@ -1,0 +1,21 @@
+// Debug.xcconfig
+// Debug-specific build configuration
+
+#include "Base.xcconfig"
+
+// Debug-specific compilation conditions
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) DEBUG
+
+// Debug optimization
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+GCC_OPTIMIZATION_LEVEL = 0
+
+// Debug information
+DEBUG_INFORMATION_FORMAT = dwarf
+ENABLE_TESTABILITY = YES
+
+// Debug preprocessor definitions
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)
+
+// Debug architecture
+ONLY_ACTIVE_ARCH = YES

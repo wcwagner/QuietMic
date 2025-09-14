@@ -3,280 +3,271 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 54;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2399401C9C7607CB781EFE6B /* QuietMicUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21498BA862083FF10808D88F /* QuietMicUITestsLaunchTests.swift */; };
+		86099627B5A1B428A0D77A9F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D015B53C7B4794E78A300A /* Item.swift */; };
+		871998464C1F92BA26BFD3B8 /* QuietMicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70F449E3854622A7CA3A60 /* QuietMicTests.swift */; };
+		8BB1C682BC8970C0D1F05B8B /* QuietMicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BBEC216D5D52477F0CA082 /* QuietMicApp.swift */; };
+		9896A25F4121577218A648D8 /* QuietMicUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13566FC750E92461A09EAFD5 /* QuietMicUITests.swift */; };
+		D0AE1BB240BFC34F155EEBC0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C87D56A0C2030CE2F2646D /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
-		6AB77EA22E7619C5005DE06F /* PBXContainerItemProxy */ = {
+		D7FDD961B273397411204A9E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6AB77E8A2E7619C3005DE06F /* Project object */;
+			containerPortal = C4B8A003ACB89D6A79217ADA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 6AB77E912E7619C4005DE06F;
+			remoteGlobalIDString = 228CAF7FBFD2DEE8AC80DB3E;
 			remoteInfo = QuietMic;
 		};
-		6AB77EAC2E7619C5005DE06F /* PBXContainerItemProxy */ = {
+		F3718FCB1584CFD42B18F389 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6AB77E8A2E7619C3005DE06F /* Project object */;
+			containerPortal = C4B8A003ACB89D6A79217ADA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 6AB77E912E7619C4005DE06F;
+			remoteGlobalIDString = 228CAF7FBFD2DEE8AC80DB3E;
 			remoteInfo = QuietMic;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6AB77E922E7619C4005DE06F /* QuietMic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuietMic.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AB77EA12E7619C5005DE06F /* QuietMicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuietMicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AB77EAB2E7619C5005DE06F /* QuietMicUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuietMicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		04BBEC216D5D52477F0CA082 /* QuietMicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietMicApp.swift; sourceTree = "<group>"; };
+		13566FC750E92461A09EAFD5 /* QuietMicUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietMicUITests.swift; sourceTree = "<group>"; };
+		15C87D56A0C2030CE2F2646D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		21498BA862083FF10808D88F /* QuietMicUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietMicUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		31C6EA8B365C18640EC6D3CE /* QuietMicUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietMicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F261C3B5E8C48F52AABEE84 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		51E1D906B34E2AE10FD374DD /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		59A9AC40C4CD3EC4BE140E1E /* QuietMic.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = QuietMic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A70F449E3854622A7CA3A60 /* QuietMicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietMicTests.swift; sourceTree = "<group>"; };
+		97D015B53C7B4794E78A300A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		D2166931C592C5C0D79DF6DC /* QuietMicTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = QuietMicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		6AB77E942E7619C4005DE06F /* QuietMic */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = QuietMic;
+/* Begin PBXGroup section */
+		22E8C454A18AB896299C2E2F = {
+			isa = PBXGroup;
+			children = (
+				6207DB6F58F534B81082D52F /* App */,
+				E04CFA08126A6B2D0EF8E789 /* Configs */,
+				DFACC49EE57EC7B684497FC1 /* Features */,
+				543B6F65DC9EBF8D23A089DC /* QuietMicTests */,
+				B359AEE5C6165E82BC3DB049 /* QuietMicUITests */,
+				365631D2466BC50689693E51 /* Products */,
+			);
 			sourceTree = "<group>";
 		};
-		6AB77EA42E7619C5005DE06F /* QuietMicTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+		365631D2466BC50689693E51 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				59A9AC40C4CD3EC4BE140E1E /* QuietMic.app */,
+				D2166931C592C5C0D79DF6DC /* QuietMicTests.xctest */,
+				31C6EA8B365C18640EC6D3CE /* QuietMicUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		543B6F65DC9EBF8D23A089DC /* QuietMicTests */ = {
+			isa = PBXGroup;
+			children = (
+				5A70F449E3854622A7CA3A60 /* QuietMicTests.swift */,
+			);
 			path = QuietMicTests;
 			sourceTree = "<group>";
 		};
-		6AB77EAE2E7619C5005DE06F /* QuietMicUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
+		6207DB6F58F534B81082D52F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				15C87D56A0C2030CE2F2646D /* ContentView.swift */,
+				97D015B53C7B4794E78A300A /* Item.swift */,
+				04BBEC216D5D52477F0CA082 /* QuietMicApp.swift */,
+			);
+			name = App;
+			path = ios/QuietMic/App;
+			sourceTree = "<group>";
+		};
+		B359AEE5C6165E82BC3DB049 /* QuietMicUITests */ = {
+			isa = PBXGroup;
+			children = (
+				13566FC750E92461A09EAFD5 /* QuietMicUITests.swift */,
+				21498BA862083FF10808D88F /* QuietMicUITestsLaunchTests.swift */,
+			);
 			path = QuietMicUITests;
 			sourceTree = "<group>";
 		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		6AB77E8F2E7619C4005DE06F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6AB77E9E2E7619C5005DE06F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6AB77EA82E7619C5005DE06F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		6AB77E892E7619C3005DE06F = {
+		DFACC49EE57EC7B684497FC1 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				6AB77E942E7619C4005DE06F /* QuietMic */,
-				6AB77EA42E7619C5005DE06F /* QuietMicTests */,
-				6AB77EAE2E7619C5005DE06F /* QuietMicUITests */,
-				6AB77E932E7619C4005DE06F /* Products */,
 			);
+			name = Features;
+			path = ios/QuietMic/Features;
 			sourceTree = "<group>";
 		};
-		6AB77E932E7619C4005DE06F /* Products */ = {
+		E04CFA08126A6B2D0EF8E789 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				6AB77E922E7619C4005DE06F /* QuietMic.app */,
-				6AB77EA12E7619C5005DE06F /* QuietMicTests.xctest */,
-				6AB77EAB2E7619C5005DE06F /* QuietMicUITests.xctest */,
+				3F261C3B5E8C48F52AABEE84 /* Debug.xcconfig */,
+				51E1D906B34E2AE10FD374DD /* Release.xcconfig */,
 			);
-			name = Products;
+			path = Configs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6AB77E912E7619C4005DE06F /* QuietMic */ = {
+		228CAF7FBFD2DEE8AC80DB3E /* QuietMic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6AB77EB52E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMic" */;
+			buildConfigurationList = 42D0CD0B1135B1438D701927 /* Build configuration list for PBXNativeTarget "QuietMic" */;
 			buildPhases = (
-				6AB77E8E2E7619C4005DE06F /* Sources */,
-				6AB77E8F2E7619C4005DE06F /* Frameworks */,
-				6AB77E902E7619C4005DE06F /* Resources */,
+				1D44BB94EFEA538EB5B314E0 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				6AB77E942E7619C4005DE06F /* QuietMic */,
 			);
 			name = QuietMic;
 			packageProductDependencies = (
 			);
 			productName = QuietMic;
-			productReference = 6AB77E922E7619C4005DE06F /* QuietMic.app */;
+			productReference = 59A9AC40C4CD3EC4BE140E1E /* QuietMic.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6AB77EA02E7619C5005DE06F /* QuietMicTests */ = {
+		400530E7D5D34162A125744A /* QuietMicTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6AB77EB82E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMicTests" */;
+			buildConfigurationList = F3016CFE124CBDE02A5A0B83 /* Build configuration list for PBXNativeTarget "QuietMicTests" */;
 			buildPhases = (
-				6AB77E9D2E7619C5005DE06F /* Sources */,
-				6AB77E9E2E7619C5005DE06F /* Frameworks */,
-				6AB77E9F2E7619C5005DE06F /* Resources */,
+				EE9663BC3A882A19FF3D39BE /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6AB77EA32E7619C5005DE06F /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				6AB77EA42E7619C5005DE06F /* QuietMicTests */,
+				8D7B4957D97B6AA3E6C91D71 /* PBXTargetDependency */,
 			);
 			name = QuietMicTests;
 			packageProductDependencies = (
 			);
 			productName = QuietMicTests;
-			productReference = 6AB77EA12E7619C5005DE06F /* QuietMicTests.xctest */;
+			productReference = D2166931C592C5C0D79DF6DC /* QuietMicTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6AB77EAA2E7619C5005DE06F /* QuietMicUITests */ = {
+		9DEA35B32138EDEC27C99115 /* QuietMicUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6AB77EBB2E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMicUITests" */;
+			buildConfigurationList = 2988302C9111AC801912C7B8 /* Build configuration list for PBXNativeTarget "QuietMicUITests" */;
 			buildPhases = (
-				6AB77EA72E7619C5005DE06F /* Sources */,
-				6AB77EA82E7619C5005DE06F /* Frameworks */,
-				6AB77EA92E7619C5005DE06F /* Resources */,
+				F8277D25DA1A8114E9519093 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6AB77EAD2E7619C5005DE06F /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				6AB77EAE2E7619C5005DE06F /* QuietMicUITests */,
+				3D61CE51D9201957B1EE53DC /* PBXTargetDependency */,
 			);
 			name = QuietMicUITests;
 			packageProductDependencies = (
 			);
 			productName = QuietMicUITests;
-			productReference = 6AB77EAB2E7619C5005DE06F /* QuietMicUITests.xctest */;
+			productReference = 31C6EA8B365C18640EC6D3CE /* QuietMicUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		6AB77E8A2E7619C3005DE06F /* Project object */ = {
+		C4B8A003ACB89D6A79217ADA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					6AB77E912E7619C4005DE06F = {
-						CreatedOnToolsVersion = 26.0;
+					228CAF7FBFD2DEE8AC80DB3E = {
+						DevelopmentTeam = Z3XZ94WPLT;
+						ProvisioningStyle = Automatic;
 					};
-					6AB77EA02E7619C5005DE06F = {
-						CreatedOnToolsVersion = 26.0;
-						TestTargetID = 6AB77E912E7619C4005DE06F;
+					400530E7D5D34162A125744A = {
+						DevelopmentTeam = Z3XZ94WPLT;
+						ProvisioningStyle = Automatic;
 					};
-					6AB77EAA2E7619C5005DE06F = {
-						CreatedOnToolsVersion = 26.0;
-						TestTargetID = 6AB77E912E7619C4005DE06F;
+					9DEA35B32138EDEC27C99115 = {
+						DevelopmentTeam = Z3XZ94WPLT;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 228CAF7FBFD2DEE8AC80DB3E;
 					};
 				};
 			};
-			buildConfigurationList = 6AB77E8D2E7619C3005DE06F /* Build configuration list for PBXProject "QuietMic" */;
+			buildConfigurationList = 6E06EFEE59C0F20D4971A087 /* Build configuration list for PBXProject "QuietMic" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 6AB77E892E7619C3005DE06F;
+			mainGroup = 22E8C454A18AB896299C2E2F;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 6AB77E932E7619C4005DE06F /* Products */;
+			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6AB77E912E7619C4005DE06F /* QuietMic */,
-				6AB77EA02E7619C5005DE06F /* QuietMicTests */,
-				6AB77EAA2E7619C5005DE06F /* QuietMicUITests */,
+				228CAF7FBFD2DEE8AC80DB3E /* QuietMic */,
+				400530E7D5D34162A125744A /* QuietMicTests */,
+				9DEA35B32138EDEC27C99115 /* QuietMicUITests */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		6AB77E902E7619C4005DE06F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6AB77E9F2E7619C5005DE06F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6AB77EA92E7619C5005DE06F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		6AB77E8E2E7619C4005DE06F /* Sources */ = {
+		1D44BB94EFEA538EB5B314E0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0AE1BB240BFC34F155EEBC0 /* ContentView.swift in Sources */,
+				86099627B5A1B428A0D77A9F /* Item.swift in Sources */,
+				8BB1C682BC8970C0D1F05B8B /* QuietMicApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6AB77E9D2E7619C5005DE06F /* Sources */ = {
+		EE9663BC3A882A19FF3D39BE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				871998464C1F92BA26BFD3B8 /* QuietMicTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6AB77EA72E7619C5005DE06F /* Sources */ = {
+		F8277D25DA1A8114E9519093 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9896A25F4121577218A648D8 /* QuietMicUITests.swift in Sources */,
+				2399401C9C7607CB781EFE6B /* QuietMicUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6AB77EA32E7619C5005DE06F /* PBXTargetDependency */ = {
+		3D61CE51D9201957B1EE53DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6AB77E912E7619C4005DE06F /* QuietMic */;
-			targetProxy = 6AB77EA22E7619C5005DE06F /* PBXContainerItemProxy */;
+			target = 228CAF7FBFD2DEE8AC80DB3E /* QuietMic */;
+			targetProxy = D7FDD961B273397411204A9E /* PBXContainerItemProxy */;
 		};
-		6AB77EAD2E7619C5005DE06F /* PBXTargetDependency */ = {
+		8D7B4957D97B6AA3E6C91D71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6AB77E912E7619C4005DE06F /* QuietMic */;
-			targetProxy = 6AB77EAC2E7619C5005DE06F /* PBXContainerItemProxy */;
+			target = 228CAF7FBFD2DEE8AC80DB3E /* QuietMic */;
+			targetProxy = F3718FCB1584CFD42B18F389 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		6AB77EB32E7619C5005DE06F /* Debug */ = {
+		244AD43839B25F6B90C6DFB1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51E1D906B34E2AE10FD374DD /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -302,77 +293,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = ios/QuietMic/QuietMic.entitlements;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		6AB77EB42E7619C5005DE06F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -380,204 +304,203 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				INFOPLIST_FILE = ios/QuietMic/Info.plist;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
-		6AB77EB62E7619C5005DE06F /* Debug */ = {
+		668650E79F01F14155684529 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				CODE_SIGN_ENTITLEMENTS = ios/QuietMic/QuietMic.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = ios/QuietMic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				PRODUCT_NAME = QuietMic;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		845E7282640D2B41F106C2C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = QuietMicTests;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuietMic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/QuietMic";
 			};
 			name = Debug;
 		};
-		6AB77EB72E7619C5005DE06F /* Release */ = {
+		8DBB4F95A0F7D53B15C6066C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = QuietMicUITests;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				TEST_TARGET_NAME = QuietMic;
+			};
+			name = Debug;
+		};
+		955C50D8D9284589160E7C72 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F261C3B5E8C48F52AABEE84 /* Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = ios/QuietMic/QuietMic.entitlements;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ios/QuietMic/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A2F329A304F3329D6AA6D170 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ios/QuietMic/QuietMic.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = ios/QuietMic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		6AB77EB92E7619C5005DE06F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMicTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuietMic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/QuietMic";
+				PRODUCT_NAME = QuietMic;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
-		6AB77EBA2E7619C5005DE06F /* Release */ = {
+		B308D71FDE946F9F8622BDF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMicTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = QuietMicUITests;
+				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuietMic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/QuietMic";
+				TEST_TARGET_NAME = QuietMic;
 			};
 			name = Release;
 		};
-		6AB77EBC2E7619C5005DE06F /* Debug */ = {
+		F916C5205B071CEFEB37D951 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMicUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_NAME = QuietMicTests;
+				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = QuietMic;
-			};
-			name = Debug;
-		};
-		6AB77EBD2E7619C5005DE06F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z3XZ94WPLT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.williamwagner.QuietMicUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = QuietMic;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuietMic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/QuietMic";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6AB77E8D2E7619C3005DE06F /* Build configuration list for PBXProject "QuietMic" */ = {
+		2988302C9111AC801912C7B8 /* Build configuration list for PBXNativeTarget "QuietMicUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6AB77EB32E7619C5005DE06F /* Debug */,
-				6AB77EB42E7619C5005DE06F /* Release */,
+				8DBB4F95A0F7D53B15C6066C /* Debug */,
+				B308D71FDE946F9F8622BDF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		6AB77EB52E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMic" */ = {
+		42D0CD0B1135B1438D701927 /* Build configuration list for PBXNativeTarget "QuietMic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6AB77EB62E7619C5005DE06F /* Debug */,
-				6AB77EB72E7619C5005DE06F /* Release */,
+				A2F329A304F3329D6AA6D170 /* Debug */,
+				668650E79F01F14155684529 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		6AB77EB82E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMicTests" */ = {
+		6E06EFEE59C0F20D4971A087 /* Build configuration list for PBXProject "QuietMic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6AB77EB92E7619C5005DE06F /* Debug */,
-				6AB77EBA2E7619C5005DE06F /* Release */,
+				955C50D8D9284589160E7C72 /* Debug */,
+				244AD43839B25F6B90C6DFB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		6AB77EBB2E7619C5005DE06F /* Build configuration list for PBXNativeTarget "QuietMicUITests" */ = {
+		F3016CFE124CBDE02A5A0B83 /* Build configuration list for PBXNativeTarget "QuietMicTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6AB77EBC2E7619C5005DE06F /* Debug */,
-				6AB77EBD2E7619C5005DE06F /* Release */,
+				845E7282640D2B41F106C2C8 /* Debug */,
+				F916C5205B071CEFEB37D951 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 6AB77E8A2E7619C3005DE06F /* Project object */;
+	rootObject = C4B8A003ACB89D6A79217ADA /* Project object */;
 }

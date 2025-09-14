@@ -1,0 +1,70 @@
+name: QuietMic
+options:
+  useBaseInternationalization: true
+  bundleIdPrefix: com.williamwagner
+
+configs:
+  Debug: debug
+  Release: release
+
+configFiles:
+  Debug: Configs/Debug.xcconfig
+  Release: Configs/Release.xcconfig
+
+settings:
+  base:
+    INFOPLIST_FILE: ios/QuietMic/Info.plist
+    CODE_SIGN_ENTITLEMENTS: ios/QuietMic/QuietMic.entitlements
+
+targets:
+  QuietMic:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - ios/QuietMic/App
+      - ios/QuietMic/Features
+    resources:
+      - ios/QuietMic/Resources
+    info:
+      path: ios/QuietMic/Info.plist
+    entitlements:
+      path: ios/QuietMic/QuietMic.entitlements
+    settings:
+      base:
+        PRODUCT_NAME: QuietMic
+    scheme:
+      testTargets:
+        - QuietMicTests
+        - QuietMicUITests
+
+  QuietMicTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - QuietMicTests
+    dependencies:
+      - target: QuietMic
+    settings:
+      base:
+        PRODUCT_NAME: QuietMicTests
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/QuietMic.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/QuietMic
+        BUNDLE_LOADER: $(TEST_HOST)
+        STRING_CATALOG_GENERATE_SYMBOLS: false
+    scheme: {}
+
+  QuietMicUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - QuietMicUITests
+    dependencies:
+      - target: QuietMic
+    settings:
+      base:
+        PRODUCT_NAME: QuietMicUITests
+        TEST_TARGET_NAME: QuietMic
+        STRING_CATALOG_GENERATE_SYMBOLS: false
+    scheme: {}
