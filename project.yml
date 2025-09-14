@@ -12,9 +12,7 @@ configFiles:
   Release: Configs/Release.xcconfig
 
 settings:
-  base:
-    INFOPLIST_FILE: ios/QuietMic/Info.plist
-    CODE_SIGN_ENTITLEMENTS: ios/QuietMic/QuietMic.entitlements
+  base: {}
 
 targets:
   QuietMic:
@@ -28,8 +26,14 @@ targets:
       - ios/QuietMic/Resources
     info:
       path: ios/QuietMic/Info.plist
+      properties:
+        NSSupportsLiveActivities: true
+        NSMicrophoneUsageDescription: "QuietMic needs microphone access to record audio in the background"
+        UIBackgroundModes:
+          - audio
     entitlements:
       path: ios/QuietMic/QuietMic.entitlements
+      properties: {}
     settings:
       base:
         PRODUCT_NAME: QuietMic
