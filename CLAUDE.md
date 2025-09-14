@@ -6,7 +6,7 @@ Low-touch iOS 26 voice recording app that is launched via iPhone's action. This 
 
 ```
 .
-├─ project.yml              # XcodeGen configuration (single source of truth)
+├─ project.yml              # XcodeGen configuration (single source of truth for Plist, entitlements, etc.)
 ├─ Makefile                 # Build automation (gen, build, test, clean)
 ├─ Configs/
 │  ├─ Base.xcconfig        # Swift 6, strict/approachable concurrency, shared settings
@@ -14,8 +14,6 @@ Low-touch iOS 26 voice recording app that is launched via iPhone's action. This 
 │  └─ Release.xcconfig
 └─ ios/
    └─ QuietMic/
-      ├─ Info.plist        # Explicit app metadata (not auto-generated)
-      ├─ QuietMic.entitlements # Siri + background audio permissions
       ├─ App/              # Core app code (QuietMicApp.swift, etc.)
       ├─ Features/         # Future: Audio/, Shortcuts/ modules
       └─ Resources/        # Assets.xcassets
@@ -36,7 +34,7 @@ make clean  # Remove generated project and build artifacts
 
 **Agent-Intuitive Design**: One obvious place for each concern
 - **Build policy**: Lives in `.xcconfig` files, not YAML
-- **App metadata**: Explicit `Info.plist` and `.entitlements` files
+- **App metadata**: Auto-generated from `project.yml` inline properties
 - **Project wiring**: Single `project.yml` at root
 - **Source organization**: Modular by feature, not by file type
 
