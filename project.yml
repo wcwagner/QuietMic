@@ -25,15 +25,17 @@ targets:
     resources:
       - ios/QuietMic/Resources
     info:
-      path: ios/QuietMic/Info.plist
+      path: Configs/QuietMic.Info.plist
       properties:
         NSSupportsLiveActivities: true
-        NSMicrophoneUsageDescription: "QuietMic needs microphone access to record audio in the background"
+        NSMicrophoneUsageDescription: "QuietMic records audio locally on-device for quick voice memos"
         UIBackgroundModes:
           - audio
     entitlements:
-      path: ios/QuietMic/QuietMic.entitlements
-      properties: {}
+      path: Configs/QuietMic.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.usernotifications.time-sensitive: true
     settings:
       base:
         PRODUCT_NAME: QuietMic

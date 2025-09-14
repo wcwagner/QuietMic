@@ -1,21 +1,29 @@
+SCHEME ?= QuietMic
+CONFIG ?= Debug
+DEST   ?= 'platform=iOS Simulator,name=iPhone 16'
+
 .PHONY: gen build test clean
 
 gen:
-	@echo "Generating Xcode project with XcodeGen..."
-	@xcodegen generate
+	@echo "Generating Xcode project with XcodeGen (cache)…"
+	@xcodegen generate --use-cache
 
 build:
 	@echo "Building QuietMic..."
-	@xcodebuild -scheme QuietMic -destination 'platform=iOS Simulator,name=iPhone 16' build
+	@xcodebuild -scheme $(SCHEME) -configuration $(CONFIG) \
+	  -destination $(DEST) build
 
 test:
 	@echo "Running tests..."
-	@xcodebuild -scheme QuietMic -destination 'platform=iOS Simulator,name=iPhone 16' test
+	@xcodebuild -scheme $(SCHEME) -configuration $(CONFIG) \
+	  -destination $(DEST) test
 
 clean:
 	@echo "Cleaning project..."
-	@rm -rf QuietMic.xcodeproj DerivedData
-	@xcodebuild clean -scheme QuietMic || true
+	@xcodebuild -scheme $(SCHEME) -configuration $(CONFIG) clean
+	# If you still see "modified during build" after big branch/config changes,
+	# uncomment the next line to clear this project's DerivedData:
+	# rm -rf ~/Library/Developer/Xcode/DerivedData/QuietMic*
 
 help:
 	@echo "Available commands:"
