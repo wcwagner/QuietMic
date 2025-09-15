@@ -164,6 +164,8 @@ status:
 
 # Always collect unified logs (passwordless via sudo wrapper), artifacts, and windowed crash/Jetsam for [start, stop|now].
 collect:
+	@echo "Collecting iOS device logs for $(DEVICE_ID)…"
+	@bash bin/probe-ios-logging.sh "$(RUN_DIR)" "$(DEVICE_ID)" || true
 	@bash bin/collect-logs.sh "$(RUN_DIR)" "$(DEVICE_ID)" "$(BUNDLE_ID)"
 
 tail:

@@ -10,15 +10,47 @@ echo "$END_ISO" > "$RUN_DIR/end.iso"
 START="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$START_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$START_ISO")"
 END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$END_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$END_ISO")"
 
-# Unified log snapshot (root required) + small NDJSON export of relevant subsystems/processes.
-# Uses secure sudo wrapper for passwordless log collection (note: log collect doesn't support --end)
-# Collect system logs (device-specific collection may not work in all configurations)
-sudo /usr/local/sbin/quietmic-log-collect --start "$START" --output "$RUN_DIR/device.logarchive"
+# Unified log snapshot from the **device** (root required).
+# NOTE: log collect supports --device/--device-name/--device-udid and --start|--last|--size.
+# Using --device-name since --device-udid has issues on some systems.
+# Also: collection must be over USB, not Wi‑Fi, or you'll see "Device not configured (6)".
+DEVICE_NAME=$(xcrun devicectl list devices --hide-default-columns --columns Name --filter 'Platform == "iOS" AND State == "connected"' | tail -n +3 | head -n1)
+IOS_ARCHIVE="$RUN_DIR/ios.logarchive"
+COLLECT_LOG="$RUN_DIR/collect.log"
+{
+  echo "collect:start=$(date -Iseconds)"
+  echo "device_udid=$DEVICE_ID"
+  echo "device_name=$DEVICE_NAME"
+  echo "window=$START → $END"
+  # Keep the archive bounded during tight dev loops.
+  sudo /usr/local/sbin/quietmic-log-collect \
+    --device-name "$DEVICE_NAME" \
+    --start "$START" \
+    --size 50m \
+    --output "$IOS_ARCHIVE"
+  rc=$?
+  echo "collect:rc=$rc"
+  echo "collect:end=$(date -Iseconds)"
+} >>"$COLLECT_LOG" 2>&1 || true
+
+# Handle common failure cases with helpful diagnostics for the agent.
+if [ ! -d "$IOS_ARCHIVE" ]; then
+  if grep -q "Device not configured (6)" "$COLLECT_LOG"; then
+    echo "⚠️  iOS device log snapshot failed: Device not configured (6)" | tee -a "$COLLECT_LOG"
+    echo "Hints: ensure USB (not Wi‑Fi), device is trusted/paired, Developer Mode is enabled." | tee -a "$COLLECT_LOG"
+    echo "You can quickly verify by opening Console.app and confirming the device streams logs." | tee -a "$COLLECT_LOG"
+  else
+    echo "⚠️  iOS device log snapshot failed; see $COLLECT_LOG" | tee -a "$COLLECT_LOG"
+  fi
+  # Fall back to previous behavior (Mac snapshot) so the pipeline still produces something.
+  sudo /usr/local/sbin/quietmic-log-collect --last 10m --output "$RUN_DIR/mac.logarchive" >>"$COLLECT_LOG" 2>&1 || true
+  IOS_ARCHIVE="$RUN_DIR/mac.logarchive"
+fi
 # Convert timestamps back to proper format for log show (which expects YYYY-MM-DD HH:MM:SS)
 SHOW_START="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$START_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$START_ISO")"
 SHOW_END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$END_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$END_ISO")"
 
-/usr/bin/log show --archive "$RUN_DIR/device.logarchive" --style ndjson --info --debug \
+/usr/bin/log show --archive "$IOS_ARCHIVE" --style ndjson --info --debug \
   --start "$SHOW_START" --end "$SHOW_END" \
   --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} OR eventMessage CONTAINS[c] "Jetsam" OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
 
