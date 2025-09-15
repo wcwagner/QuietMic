@@ -13,6 +13,7 @@ struct ContentView: View {
     @Query private var items: [Item]
 
     var body: some View {
+        let _ = agentPrint("VIEW_RENDER", ["view": "ContentView", "items_count": "\(items.count)"])
         NavigationSplitView {
             List {
                 ForEach(items) { item in
@@ -40,16 +41,21 @@ struct ContentView: View {
     }
 
     private func addItem() {
+        agentPrint("USER_ACTION", ["action": "add_item"])
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
+            agentPrint("USER_ACTION", ["action": "add_item_complete", "item_id": "\(newItem.id)"])
         }
     }
 
     private func deleteItems(offsets: IndexSet) {
+        agentPrint("USER_ACTION", ["action": "delete_items", "count": "\(offsets.count)"])
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                let item = items[index]
+                agentPrint("USER_ACTION", ["action": "delete_item", "item_id": "\(item.id)"])
+                modelContext.delete(item)
             }
         }
     }

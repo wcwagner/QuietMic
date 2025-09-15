@@ -23,11 +23,53 @@ Low-touch iOS 26 voice recording app that is launched via iPhone's action. This 
 
 ## Development Workflow
 
+**Contract:** fast, non-blocking outer loop; durable, small artifacts; “latest” by default; named archives on demand.
+
+```mermaid
+flowchart TD
+  A[make dev RUN_ID=latest] --> B[launch supervisor writes start.iso]
+  B --> C{User does Action Button flow}
+  C --> D[make collect] --> E[artifacts + unified.jsonl for window]
+  C -->|optional| S[make stop] --> D
+
 ```bash
-make gen    # Generate .xcodeproj from project.yml with caching (always run first)
-make build  # Build app with Swift 6 strict concurrency
-make test   # Run unit tests (Swift 6 concurrency issues expected in test targets)
-make clean  # Clean build artifacts (simple xcodebuild clean)
+# Build→install→launch (returns immediately). Default session is runs/latest.
+make dev [DEVICE_ID=<udid>] [RUN_ID=latest|slug]
+
+# Stop the on-device app and clear the lock; supervisor writes stop.iso.
+make stop
+
+# Snapshot unified logs + crash/Jetsam for [start.iso, stop.iso|now] and pull Documents/.
+make collect
+
+# Live logs
+make tail
+
+# Housekeeping
+make prune    # keep only most recent N archives (N=10 by default)
+make clean    # drop runs/latest, .derived, and build/_latest.*
+```
+
+### Files Per Run
+```
+runs/latest/ or runs/archive/<slug>/
+  start.iso, stop.iso      # ISO timestamps bracketing the session
+  console.txt              # JSON lines from app (from devicectl --console)
+  unified.jsonl            # Unified log slice for the window (requires sudo)
+  artifacts/               # result.json + recorded audio pulled from Documents/
+  systemCrashLogs/         # Only crash/Jetsam files whose filename timestamps land in-window
+  summary.json             # Tiny counts for quick reporting
+```
+
+### App contract (stdout JSON lines)
+
+```json
+{"ev":"INTENT_FIRED","run_id":"<id>"}
+{"ev":"LA_START_OK","run_id":"<id>"}
+{"ev":"AV_SESSION_ACTIVE","category":"playAndRecord","run_id":"<id>"}
+{"ev":"REC_BEGIN","run_id":"<id>"}
+{"ev":"REC_STOP","file":"Documents/rec/…m4a","duration_s":"…","bytes":"…","run_id":"<id>"}
+{"ev":"ERROR","code":"…","message":"…","run_id":"<id>"}
 ```
 
 **Critical**: Always run `make gen` after modifying `project.yml` or switching branches. XcodeGen uses `--use-cache` to prevent unnecessary file rewrites that can confuse Xcode's dependency tracking.
