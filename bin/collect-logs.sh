@@ -7,7 +7,8 @@ END="$(cat "$RUN_DIR/stop.iso"  2>/dev/null || date -Iseconds)"
 echo "$END" > "$RUN_DIR/end.iso"
 
 # Unified log snapshot (root required) + small NDJSON export of relevant subsystems/processes.
-sudo log collect --device-udid "$DEVICE_ID" --start "$START" --end "$END" --output "$RUN_DIR/device.logarchive"
+# Uses secure sudo wrapper for passwordless log collection
+sudo /usr/local/sbin/quietmic-log-collect --device-udid "$DEVICE_ID" --start "$START" --end "$END" --output "$RUN_DIR/device.logarchive"
 log show --archive "$RUN_DIR/device.logarchive" --style ndjson --info --debug \
   --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} \
                OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} \

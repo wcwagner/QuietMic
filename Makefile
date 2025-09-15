@@ -43,6 +43,14 @@ dev: guard gen build install preseed start ## Build→install→launch (returns 
 guard:
 	@mkdir -p $(RUN_DIR) $(LOCK_DIR) $(BUILD_OUT)
 	@if [ -n "$(WARN_DEVICE)" ]; then echo "⚠️  auto-selected device: $(DEVICE_ID)"; fi
+	@# Check for cooldown period to prevent immediate restart races
+	@if [ -f "$(RUN_DIR)/cooldown.iso" ]; then \
+		COOLDOWN_TIME=$$(cat "$(RUN_DIR)/cooldown.iso" 2>/dev/null || echo ""); \
+		if [ -n "$$COOLDOWN_TIME" ]; then \
+			echo "Respecting 2-second cooldown after previous stop..."; \
+			sleep 2; \
+		fi; \
+	fi
 	@if [ -d "$(LOCK)" ]; then \
 	  if ps -p "$$(cat $(RUN_DIR)/supervisor.pid 2>/dev/null)" >/dev/null 2>&1; then \
 	    echo "services already running (lock present)"; exit 1; \
@@ -89,20 +97,39 @@ start:
 	@nohup bash bin/launch.sh "$(RUN_DIR)" "$(DEVICE_ID)" "$(BUNDLE_ID)" > "$(RUN_DIR)/supervisor.out" 2>&1 & echo $$! > "$(RUN_DIR)/supervisor.pid"
 	@echo "launched $(BUNDLE_ID) on $(DEVICE_ID); tail logs: make tail"
 
-# Stop app on device, stop helpers, clear lock. Also records stop.iso via supervisor.
+# Stop app on device, stop helpers, wait for supervisor to exit, then clear lock
 stop:
 	@bash bin/stop-app.sh "$(DEVICE_ID)" "$(BUNDLE_ID)" "$(RUN_DIR)" || true
 	-@kill "$$(cat $(RUN_DIR)/syslog.pid 2>/dev/null)" 2>/dev/null || true
-	-@rm -rf "$(LOCK)"
+	@# Wait for supervisor to finish before clearing lock (prevents race conditions)
+	@if [ -f "$(RUN_DIR)/supervisor.pid" ]; then \
+		SUP=$$(cat "$(RUN_DIR)/supervisor.pid" 2>/dev/null || echo); \
+		if [ -n "$$SUP" ]; then \
+			echo "Waiting for supervisor (PID $$SUP) to exit..."; \
+			for i in $$(seq 1 20); do \
+				ps -p "$$SUP" >/dev/null 2>&1 || break; \
+				sleep 0.2; \
+			done; \
+		fi; \
+	fi
+	@# Ensure stop.iso is written and add cooldown timestamp
+	@[ -f "$(RUN_DIR)/stop.iso" ] || date -Iseconds > "$(RUN_DIR)/stop.iso"
+	@date -Iseconds > "$(RUN_DIR)/cooldown.iso"
+	@rm -rf "$(LOCK)"
 
 status:
 	@echo "Session dir: $(RUN_DIR)"
 	@printf "Supervisor: "; if ps -p "$$(cat $(RUN_DIR)/supervisor.pid 2>/dev/null)" >/dev/null 2>&1; then echo "RUNNING"; else echo "STOPPED"; fi
-	@printf "Device app: "; xcrun devicectl device info processes --device "$(DEVICE_ID)" | grep -E "^[0-9]+" | grep -E "$(BUNDLE_ID)" || echo "not found"
+	@printf "Device app: "; \
+	if xcrun devicectl device info processes --device "$(DEVICE_ID)" --json-output "$(RUN_DIR)/processes.json" >/dev/null 2>&1; then \
+		PID=$$(jq -r --arg BID "$(BUNDLE_ID)" '[..|objects|select(has("bundleIdentifier"))|select(.bundleIdentifier==$$BID)|.pid] | first // empty' "$(RUN_DIR)/processes.json" 2>/dev/null); \
+		if [ -n "$$PID" ]; then echo "pid=$$PID (RUNNING)"; else echo "not found"; fi; \
+	else \
+		echo "device unavailable"; \
+	fi
 
-# Always collect unified logs (requires sudo), artifacts, and windowed crash/Jetsam for [start, stop|now].
+# Always collect unified logs (passwordless via sudo wrapper), artifacts, and windowed crash/Jetsam for [start, stop|now].
 collect:
-	@sudo -n true 2>/dev/null || sudo -v
 	@bash bin/collect-logs.sh "$(RUN_DIR)" "$(DEVICE_ID)" "$(BUNDLE_ID)"
 
 tail:
