@@ -2,18 +2,20 @@
 set -euo pipefail
 RUN_DIR="$1"; DEVICE_ID="$2"; BUNDLE_ID="$3"
 
-START="$(cat "$RUN_DIR/start.iso" 2>/dev/null || date -Iseconds)"
-END="$(cat "$RUN_DIR/stop.iso"  2>/dev/null || date -Iseconds)"
-echo "$END" > "$RUN_DIR/end.iso"
+START_ISO="$(cat "$RUN_DIR/start.iso" 2>/dev/null || date -Iseconds)"
+END_ISO="$(cat "$RUN_DIR/stop.iso"  2>/dev/null || date -Iseconds)"
+echo "$END_ISO" > "$RUN_DIR/end.iso"
+
+# Convert ISO 8601 timestamps to format expected by log collect: YYYY-MM-DD HH:MM:SS
+START="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$START_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$START_ISO")"
+END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$END_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$END_ISO")"
 
 # Unified log snapshot (root required) + small NDJSON export of relevant subsystems/processes.
-# Uses secure sudo wrapper for passwordless log collection
-sudo /usr/local/sbin/quietmic-log-collect --device-udid "$DEVICE_ID" --start "$START" --end "$END" --output "$RUN_DIR/device.logarchive"
+# Uses secure sudo wrapper for passwordless log collection (note: log collect doesn't support --end)
+# Collect system logs (device-specific collection may not work in all configurations)
+sudo /usr/local/sbin/quietmic-log-collect --start "$START" --output "$RUN_DIR/device.logarchive"
 log show --archive "$RUN_DIR/device.logarchive" --style ndjson --info --debug \
-  --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} \
-               OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} \
-               OR eventMessage CONTAINS[c] "Jetsam" \
-               OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
+  --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} OR eventMessage CONTAINS[c] "Jetsam" OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
 
 # App artifacts
 mkdir -p "$RUN_DIR/artifacts"
@@ -25,7 +27,7 @@ xcrun devicectl device copy from --device "$DEVICE_ID" \
 mkdir -p "$RUN_DIR/systemCrashLogs"
 LIST="$RUN_DIR/crash.list.txt"
 xcrun devicectl device info files --device "$DEVICE_ID" --domain-type systemCrashLogs > "$LIST" || true
-python3 - "$LIST" "$START" "$END" > "$RUN_DIR/crash.to_copy.txt" <<'PY'
+python3 - "$LIST" "$START_ISO" "$END_ISO" > "$RUN_DIR/crash.to_copy.txt" <<'PY'
 import sys,re,datetime
 src, start_s, end_s = sys.argv[1], sys.argv[2], sys.argv[3]
 start = datetime.datetime.fromisoformat(start_s.replace('Z','+00:00'))
@@ -45,7 +47,7 @@ while IFS= read -r rel; do
 done < "$RUN_DIR/crash.to_copy.txt"
 
 # Tiny summary for the agent
-python3 - <<'PY' > "$RUN_DIR/summary.json"
+python3 - "$RUN_DIR" <<'PY' > "$RUN_DIR/summary.json"
 import os,json,glob,sys
 d=sys.argv[1]
 def size(p):
@@ -60,4 +62,3 @@ print(json.dumps({
   "artifacts": os.listdir(os.path.join(d,'artifacts')) if os.path.isdir(os.path.join(d,'artifacts')) else []
 }, indent=2))
 PY
-"$RUN_DIR"
