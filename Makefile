@@ -99,7 +99,7 @@ start:
 
 # Stop app on device, stop helpers, wait for supervisor to exit, then clear lock
 stop:
-	@bash bin/stop-app.sh "$(DEVICE_ID)" "$(BUNDLE_ID)" "$(RUN_DIR)" || true
+	@bash bin/stop-app.sh "$(DEVICE_ID)" "$(BUNDLE_ID)" "$(RUN_DIR)" "$(APP_SCHEME)" || true
 	-@kill "$$(cat $(RUN_DIR)/syslog.pid 2>/dev/null)" 2>/dev/null || true
 	@# Wait for supervisor to finish before clearing lock (prevents race conditions)
 	@if [ -f "$(RUN_DIR)/supervisor.pid" ]; then \
@@ -122,7 +122,7 @@ status:
 	@printf "Supervisor: "; if ps -p "$$(cat $(RUN_DIR)/supervisor.pid 2>/dev/null)" >/dev/null 2>&1; then echo "RUNNING"; else echo "STOPPED"; fi
 	@printf "Device app: "; \
 	if xcrun devicectl device info processes --device "$(DEVICE_ID)" --json-output "$(RUN_DIR)/processes.json" >/dev/null 2>&1; then \
-		PID=$$(jq -r --arg BID "$(BUNDLE_ID)" '[..|objects|select(has("bundleIdentifier"))|select(.bundleIdentifier==$$BID)|.pid] | first // empty' "$(RUN_DIR)/processes.json" 2>/dev/null); \
+		PID=$$(jq -r --arg APP "$(APP_SCHEME)" '.result.runningProcesses[]|select(.executable|contains($$APP))|.processIdentifier' "$(RUN_DIR)/processes.json" 2>/dev/null); \
 		if [ -n "$$PID" ]; then echo "pid=$$PID (RUNNING)"; else echo "not found"; fi; \
 	else \
 		echo "device unavailable"; \

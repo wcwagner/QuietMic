@@ -86,101 +86,21 @@ runs/latest/ or runs/archive/<slug>/
 
 **XcodeGen Over Xcode**: Project files are generated, not edited by hand. Generated plist/entitlements files are tracked in git to prevent "modified during build" conflicts and ensure reviewable changes.
 
-## Agent Commands
+## Commands (delta)
 
-### Core Commands
-- `make dev [RUN_ID=latest|slug] [DEVICE_ID=…]` — Build→install→launch (returns immediately; writes start.iso)
-- `make status` — Show supervisor state and app PID (JSON-based, reliable)
-- `make stop` — Signal app, wait for supervisor exit, write stop.iso and cooldown
-- `make collect` — Passwordless unified log collection via sudo wrapper
-- `make tail` — Live console output
-- `make prune` — Keep only recent N archives (default: 10)
-- `make clean` — Drop runs/latest, .derived, build artifacts
+make dev [RUN_ID=latest|slug] [DEVICE_ID=…]  # returns immediately; writes start.iso
+make status                                   # prints supervisor state and app PID (JSON-based)
+make stop                                     # signals the on-device app, waits for supervisor to exit, writes stop.iso
+make collect                                  # uses passwordless sudo wrapper to run `log collect`
+make prune | make clean
 
-### Setup Required for Agents
+## Troubleshooting (new)
+- Device unplugged → run `make status`; reconnect and re-run `make dev`.
+- App exited mid-run → `make collect`, inspect `unified.jsonl` (RunningBoard reason), then decide.
+- Stop → relaunch loop → ensure no follow-up `make dev` fired; check `unified.jsonl` for who launched.
+- Stale lock → guard auto-cleans; inspect `runs/latest/supervisor.out` if curious.
 
-**Passwordless Log Collection:**
-Agents need to run `make collect` without password prompts. Run this setup once:
-
-```bash
-./setup-sudo-wrapper.sh
-```
-
-This creates a secure sudo wrapper that allows only `log collect` command and configures passwordless access following security best practices.
-
-**Required Tools:**
-- `jq` for JSON parsing (device process detection)
-- `xcodegen` for project generation
-- `xcbeautify` for token-efficient build output
-
-## Troubleshooting
-
-### Common Agent Scenarios
-
-**Device disconnected:**
-- `make dev` will fail early if no `DEVICE_ID` is detected
-- Always run `make status` first to check device availability
-- Reconnect device and re-run `make dev`
-- `cfgutil` syslog will also stop if device disconnects
-
-**App not found but supervisor RUNNING:**
-- The app exited on device (user quit, iOS termination, crash)
-- Run `make collect` to gather logs, then `make status` to confirm
-- Check `unified.jsonl` for RunningBoard `terminate;` events and reasons
-- Do NOT relaunch until you've reviewed the termination cause
-
-**Stop → app appears to relaunch immediately:**
-- Do NOT automatically re-run `make dev` after `make stop`
-- First run `make status` to verify supervisor is STOPPED
-- Check unified logs: if RunningBoard shows `launch;` with `system/user interaction`, iOS relaunched
-- If you see devicectl `Launched application…` output, the agent relaunched it—stop and investigate
-
-**Stale lock warnings:**
-- "stale lock found; cleaning" means previous session didn't exit cleanly
-- Guard automatically removes stale locks safely
-- Inspect `runs/latest/supervisor.out` for context if needed
-- Session state is preserved; you can proceed normally
-
-**Collection failures:**
-- If `make collect` asks for password: run `./setup-sudo-wrapper.sh` setup
-- If unified logs are empty: check device connection and time windows
-- `cfgutil` syslog is optional; unified logs remain the authoritative source
-
-### Status Output Examples
-
-```bash
-# Healthy running session
+## Status output (example)
 Session dir: runs/latest
 Supervisor: RUNNING
 Device app: pid=12345 (RUNNING)
-
-# App stopped but supervisor cleaning up
-Session dir: runs/latest
-Supervisor: RUNNING
-Device app: not found
-
-# Session fully stopped
-Session dir: runs/latest
-Supervisor: STOPPED
-Device app: not found
-
-# Device disconnected
-Session dir: runs/latest
-Supervisor: RUNNING
-Device app: device unavailable
-```
-
-### Debugging Device App Issues
-
-After collecting logs, use this to find termination/launch reasons:
-
-```bash
-jq -r 'select(.subsystem=="com.apple.runningboard" and (.eventMessage|test("launch|terminate"; "i")))
-       | [.timestamp,.process,.eventMessage] | @tsv' runs/<RUN_ID>/unified.jsonl | tail -n 20
-```
-
-Look for patterns:
-- `terminate; (reason: jetsam)` → Memory pressure
-- `terminate; (reason: user request)` → User force-quit
-- `launch; (reason: system.user interaction)` → iOS relaunched after user action
-- Fresh `devicectl` session → Agent relaunched

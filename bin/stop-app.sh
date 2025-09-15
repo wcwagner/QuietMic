@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DEVICE_ID="$1"; BUNDLE_ID="$2"; RUN_DIR="$3"
+DEVICE_ID="$1"; BUNDLE_ID="$2"; RUN_DIR="$3"; APP_SCHEME="$4"
 
 # Helper function to get PID using JSON parsing for reliability
 get_app_pid() {
     if xcrun devicectl device info processes --device "$DEVICE_ID" --json-output "$RUN_DIR/processes.json" >/dev/null 2>&1; then
-        jq -r --arg BID "$BUNDLE_ID" '[..|objects|select(has("bundleIdentifier"))|select(.bundleIdentifier==$BID)|.pid] | first // empty' \
+        jq -r --arg APP "$APP_SCHEME" '.result.runningProcesses[]|select(.executable|contains($APP))|.processIdentifier' \
            "$RUN_DIR/processes.json" 2>/dev/null || echo ""
     else
         echo ""
