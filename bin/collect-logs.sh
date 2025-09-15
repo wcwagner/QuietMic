@@ -14,7 +14,12 @@ END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$END_
 # Uses secure sudo wrapper for passwordless log collection (note: log collect doesn't support --end)
 # Collect system logs (device-specific collection may not work in all configurations)
 sudo /usr/local/sbin/quietmic-log-collect --start "$START" --output "$RUN_DIR/device.logarchive"
-log show --archive "$RUN_DIR/device.logarchive" --style ndjson --info --debug \
+# Convert timestamps back to proper format for log show (which expects YYYY-MM-DD HH:MM:SS)
+SHOW_START="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$START_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$START_ISO")"
+SHOW_END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('$END_ISO'.replace('Z','+00:00')).strftime('%Y-%m-%d %H:%M:%S'))" 2>/dev/null || echo "$END_ISO")"
+
+/usr/bin/log show --archive "$RUN_DIR/device.logarchive" --style ndjson --info --debug \
+  --start "$SHOW_START" --end "$SHOW_END" \
   --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} OR eventMessage CONTAINS[c] "Jetsam" OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
 
 # App artifacts
