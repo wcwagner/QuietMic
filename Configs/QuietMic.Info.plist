@@ -20,11 +20,5 @@
 	<string>1</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>QuietMic records audio locally on-device for quick voice memos</string>
-	<key>NSSupportsLiveActivities</key>
-	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 </dict>
 </plist>

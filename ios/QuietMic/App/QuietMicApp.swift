@@ -11,20 +11,25 @@ import SwiftData
 @main
 struct QuietMicApp: App {
     var sharedModelContainer: ModelContainer = {
+        agentPrint("APP_INIT", ["phase": "model_container_setup"])
         let schema = Schema([
             Item.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            agentPrint("APP_INIT", ["phase": "model_container_ready"])
+            return container
         } catch {
+            agentPrint("APP_ERROR", ["phase": "model_container_failed", "error": "\(error)"])
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
 
     var body: some Scene {
-        WindowGroup {
+        agentPrint("APP_LAUNCH", ["phase": "scene_building"])
+        return WindowGroup {
             ContentView()
         }
         .modelContainer(sharedModelContainer)

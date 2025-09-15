@@ -1,3 +1,13 @@
 node_modules/
 package-lock.json
 *.xcodeproj
+# iOS agent rails
+runs/
+.derived/
+build/_latest.*
+build/_latest.xcresult
+build/DerivedData/
+
+# System artifacts and archives
+*.trace
+*.logarchive
