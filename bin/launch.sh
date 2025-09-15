@@ -14,6 +14,17 @@ child=$!
 echo "$child" > "$LAUNCH_PID_FILE"
 
 # When the device process exits, stamp stop time and drop the session lock if it still exists.
-wait "$child" || true
+# Don't mask devicectl failures - if launch failed (e.g., locked phone), fail the session.
+if ! wait "$child"; then
+    echo "ERROR: App launch failed - devicectl exited with error" >&2
+    echo "Common causes: phone is locked, app crashed immediately, or device disconnected" >&2
+    echo "Run 'make status' for diagnostics" >&2
+    # Clean up session artifacts for failed launches
+    rm -f "$RUN_DIR/supervisor.pid" "$RUN_DIR/devicectl.pid"
+    [ -d ".locks/session.lock" ] && rmdir ".locks/session.lock" || true
+    exit 1
+fi
+
+# Only write stop.iso for successful app sessions that actually ran
 date -Iseconds > "$STOP_ISO"
 [ -d ".locks/session.lock" ] && rmdir ".locks/session.lock" || true

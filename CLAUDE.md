@@ -99,6 +99,8 @@ make prune | make clean
 - App exited mid-run → `make collect`, inspect `unified.jsonl` (RunningBoard reason), then decide.
 - Stop → relaunch loop → ensure no follow-up `make dev` fired; check `unified.jsonl` for who launched.
 - Stale lock → guard auto-cleans; inspect `runs/latest/supervisor.out` if curious.
+- UNSUPERVISED app → iOS may restart the app after `make stop`. This is normal; the app runs outside our session and logs aren't captured. Avoid debugging unsupervised instances.
+- Failed launch → If `make dev` fails due to locked phone, no stop.iso is written. Session artifacts are incomplete and should not be used for analysis.
 
 ## Status output (example)
 Session dir: runs/latest

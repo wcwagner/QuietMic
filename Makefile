@@ -95,7 +95,22 @@ start:
 	@date -Iseconds > $(START_ISO)
 	@( command -v cfgutil >/dev/null && cfgutil syslog > $(SYSLOG_TXT) ) & echo $$! > $(RUN_DIR)/syslog.pid || true
 	@nohup bash bin/launch.sh "$(RUN_DIR)" "$(DEVICE_ID)" "$(BUNDLE_ID)" > "$(RUN_DIR)/supervisor.out" 2>&1 & echo $$! > "$(RUN_DIR)/supervisor.pid"
-	@echo "launched $(BUNDLE_ID) on $(DEVICE_ID); tail logs: make tail"
+	@echo "launching $(BUNDLE_ID) on $(DEVICE_ID)..."
+	@# Brief delay to allow early failure detection
+	@sleep 3
+	@# Check for immediate launch failures
+	@if [ -f "$(RUN_DIR)/supervisor.out" ] && grep -q "ERROR:" "$(RUN_DIR)/supervisor.out" 2>/dev/null; then \
+		echo "❌ Launch failed:"; \
+		cat "$(RUN_DIR)/supervisor.out"; \
+		echo "Run 'make status' for diagnostics"; \
+		exit 1; \
+	elif ps -p "$$(cat $(RUN_DIR)/supervisor.pid 2>/dev/null)" >/dev/null 2>&1; then \
+		echo "✅ Launch attempted; supervisor running"; \
+		echo "Run 'make status' to verify launch success"; \
+	else \
+		echo "⚠️  Launch supervisor exited unexpectedly"; \
+		echo "Run 'make status' for diagnostics"; \
+	fi
 
 # Stop app on device, stop helpers, wait for supervisor to exit, then clear lock
 stop:
@@ -123,9 +138,28 @@ status:
 	@printf "Device app: "; \
 	if xcrun devicectl device info processes --device "$(DEVICE_ID)" --json-output "$(RUN_DIR)/processes.json" >/dev/null 2>&1; then \
 		PID=$$(jq -r --arg APP "$(APP_SCHEME)" '.result.runningProcesses[]|select(.executable|contains($$APP))|.processIdentifier' "$(RUN_DIR)/processes.json" 2>/dev/null); \
-		if [ -n "$$PID" ]; then echo "pid=$$PID (RUNNING)"; else echo "not found"; fi; \
+		if [ -n "$$PID" ]; then \
+			if ps -p "$$(cat $(RUN_DIR)/supervisor.pid 2>/dev/null)" >/dev/null 2>&1; then \
+				echo "pid=$$PID (RUNNING)"; \
+			else \
+				echo "pid=$$PID (UNSUPERVISED)"; \
+			fi; \
+		else \
+			echo "not found"; \
+		fi; \
 	else \
 		echo "device unavailable"; \
+	fi
+	@# Check for launch failures and show diagnostic
+	@if [ -f "$(RUN_DIR)/supervisor.out" ] && grep -q "ERROR:" "$(RUN_DIR)/supervisor.out" 2>/dev/null; then \
+		echo "Launch status: FAILED"; \
+		if [ -f "$(CONSOLE_LOG)" ] && grep -q "Locked" "$(CONSOLE_LOG)" 2>/dev/null; then \
+			echo "Reason: Device is locked"; \
+		elif [ -f "$(CONSOLE_LOG)" ] && grep -q "crashed\|terminated" "$(CONSOLE_LOG)" 2>/dev/null; then \
+			echo "Reason: App crashed during launch"; \
+		else \
+			echo "Reason: See console.txt for details"; \
+		fi; \
 	fi
 
 # Always collect unified logs (passwordless via sudo wrapper), artifacts, and windowed crash/Jetsam for [start, stop|now].
