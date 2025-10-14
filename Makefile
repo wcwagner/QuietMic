@@ -66,7 +66,7 @@ gen:
 build: build-only
 build-only:
 	@rm -rf $(XCRESULT) $(BUILD_RAW_LOG) $(BUILD_PRETTY)
-	xcodebuild \
+	@xcodebuild \
 	  -scheme $(APP_SCHEME) \
 	  -configuration $(CONFIG) \
 	  -sdk iphoneos \
@@ -76,9 +76,15 @@ build-only:
 	  build \
 	  | tee $(BUILD_RAW_LOG) \
 	  $(if $(XCB),| $(XCB) --quieter,) \
-	  | tee $(BUILD_PRETTY)
+	  | tee $(BUILD_PRETTY); \
+	  exit $${PIPESTATUS[0]}
 
-install: build-only
+install:
+	@if [ ! -d "$(APP_PATH)" ]; then \
+		echo "❌ Build failed or app not found at $(APP_PATH)"; \
+		echo "Skipping installation"; \
+		exit 1; \
+	fi
 	xcrun devicectl device install app --device $(DEVICE_ID) "$(APP_PATH)"
 
 preseed:

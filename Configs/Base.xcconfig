@@ -16,7 +16,7 @@ TARGETED_DEVICE_FAMILY = 1,2
 
 // Swift Compilation
 SWIFT_APPROACHABLE_CONCURRENCY = YES
-SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor
+// SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor  // Removed: AppIntents should be naturally nonisolated
 SWIFT_EMIT_LOC_STRINGS = YES
 
 // Asset Compilation

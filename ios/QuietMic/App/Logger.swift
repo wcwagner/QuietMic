@@ -10,22 +10,18 @@ import OSLog
 
 let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "agent")
 
-struct AgentConfig: Codable {
-    let run_id: String
-    let ts: String
-}
-
 func loadAgentRunID() -> String {
     let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         .appendingPathComponent("agent.json")
 
     guard let data = try? Data(contentsOf: url),
-          let config = try? JSONDecoder().decode(AgentConfig.self, from: data)
+          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let runID = json["run_id"] as? String
     else {
         return "unknown"
     }
 
-    return config.run_id
+    return runID
 }
 
 private func getPersistentLogFileHandle() -> FileHandle? {
@@ -52,10 +48,8 @@ func agentPrint(_ ev: String, _ fields: [String: String] = [:]) {
 
     if let jsonData = try? JSONSerialization.data(withJSONObject: dict),
        let jsonString = String(data: jsonData, encoding: .utf8) {
-        // One line JSON to stdout; devicectl --console captures this.
         print(jsonString)
         
-        // Also persist to on-device file to survive app restarts
         if let handle = getPersistentLogFileHandle(),
            let logLine = (jsonString + "\n").data(using: .utf8) {
             try? handle.seekToEnd()
@@ -64,6 +58,5 @@ func agentPrint(_ ev: String, _ fields: [String: String] = [:]) {
         }
     }
 
-    // Also log to OSLog for unified log collection
     log.info("[\(rid, privacy: .public)] \(ev, privacy: .public) \(fields.description, privacy: .public)")
 }

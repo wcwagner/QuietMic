@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
+@MainActor
 struct QuietMicApp: App {
     var sharedModelContainer: ModelContainer = {
         agentPrint("APP_INIT", ["phase": "model_container_setup"])
