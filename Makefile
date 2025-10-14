@@ -245,6 +245,9 @@ qm-start:
 	@command -v shortcuts >/dev/null 2>&1 || { echo "❌ 'shortcuts' CLI not found (open Shortcuts.app once to enable CLI)"; exit 1; }
 	@echo "$$(date -Iseconds) qm-start" >> "$(QM_LOG)"
 	@date -Iseconds > "$(RUN_DIR)/qm.start.iso"
+	@echo "Ensuring Focus OFF then ON to trigger automation…"
+	@shortcuts run "$(QM_OFF_SHORTCUT)" >/dev/null 2>&1 || true
+	@sleep 1
 	@echo "Toggling Focus ON via $(QM_ON_SHORTCUT)…"
 	@shortcuts run "$(QM_ON_SHORTCUT)"
 	@sleep $(QM_FOCUS_SETTLE)

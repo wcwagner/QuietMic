@@ -10,7 +10,7 @@ struct StartRecordingIntent: AppIntent {
     static let description = IntentDescription("Start background audio recording in QuietMic.")
     static var supportedModes: IntentModes { .background }
 
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & ProvidesDialog {
         agentPrint("INTENT_START_RECORDING", ["phase": "begin"])
         let sessionID = try await RecordingManager.shared.start()
         agentPrint("INTENT_START_RECORDING", ["phase": "end", "session_id": sessionID])
@@ -24,7 +24,7 @@ struct StopRecordingIntent: AppIntent {
     static let description = IntentDescription("Stop background audio recording in QuietMic.")
     static var supportedModes: IntentModes { .background }
 
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some IntentResult & ProvidesDialog {
         agentPrint("INTENT_STOP_RECORDING", ["phase": "begin"])
         await RecordingManager.shared.stop()
         agentPrint("INTENT_STOP_RECORDING", ["phase": "end"])
