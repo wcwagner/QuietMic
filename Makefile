@@ -30,8 +30,8 @@ STOP_ISO        := $(RUN_DIR)/stop.iso
 COLLECT_LOG     := $(RUN_DIR)/collect.log
 
 # QuietMic Focus-based recording control
-QM_ON_SHORTCUT  ?= MAC-QM-ON
-QM_OFF_SHORTCUT ?= MAC-QM-OFF
+QM_ON_SHORTCUT  ?= MACQMON
+QM_OFF_SHORTCUT ?= MACQMOFF
 QM_FOCUS_SETTLE ?= 2
 QM_LOG          := $(RUN_DIR)/qm.log
 
