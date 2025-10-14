@@ -28,6 +28,7 @@ targets:
       path: Configs/QuietMic.Info.plist
       properties:
         NSMicrophoneUsageDescription: "QuietMic records audio locally on-device for quick voice memos"
+        UIBackgroundModes: ["audio"]
     entitlements:
       path: Configs/QuietMic.entitlements
       properties: {}

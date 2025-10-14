@@ -10,7 +10,7 @@ APP_PATH        ?= $(DERIVED)/Build/Products/$(CONFIG)-iphoneos/$(APP_SCHEME).ap
 # Require an explicit device when possible; fall back to auto-select with a loud echo.
 DEVICE_ID       ?=
 ifeq ($(strip $(DEVICE_ID)),)
-DEVICE_ID       := $(shell xcrun devicectl list devices --hide-default-columns --columns Identifier --filter 'Platform == "iOS" AND State == "connected"' | tail -n +3 | head -n1)
+DEVICE_ID       := $(shell xcrun devicectl list devices --hide-default-columns --columns Identifier --filter 'Platform == "iOS"' | tail -n +3 | head -n1)
 WARN_DEVICE     := $(shell [ -z "$(DEVICE_ID)" ] && echo "NO_DEVICE" || true)
 endif
 
@@ -36,7 +36,7 @@ BUILD_PRETTY    := $(BUILD_OUT)/_latest.txt
 XCRESULT        := $(BUILD_OUT)/_latest.xcresult
 XCB             := $(shell command -v xcbeautify 2>/dev/null)
 
-.PHONY: dev start stop status collect guard gen build install preseed tail clean prune build-only test-sim test-device help
+.PHONY: dev start stop status collect guard gen build install preseed tail clean prune build-only doctor help
 
 dev: guard gen build install preseed start ## Build→install→launch (returns immediately)
 
@@ -89,6 +89,13 @@ preseed:
 	  --domain-identifier $(BUNDLE_ID) \
 	  --source "$(AGENT_CONFIG)" \
 	  --destination "Documents/agent.json"
+	@# Create manifest with device/build metadata
+	@DEVICE_NAME=$$(xcrun devicectl list devices --hide-default-columns --columns Name --filter 'Platform == "iOS"' 2>/dev/null | tail -n +3 | head -n1); \
+	GIT_SHA=$$(git rev-parse HEAD 2>/dev/null || echo "unknown"); \
+	GIT_BRANCH=$$(git branch --show-current 2>/dev/null || echo "unknown"); \
+	printf '{\n  "run_id": "%s",\n  "device_name": "%s",\n  "device_udid": "%s",\n  "bundle_id": "%s",\n  "git_sha": "%s",\n  "git_branch": "%s",\n  "timestamp": "%s"\n}\n' \
+	  "$(RUN_ID)" "$$DEVICE_NAME" "$(DEVICE_ID)" "$(BUNDLE_ID)" "$$GIT_SHA" "$$GIT_BRANCH" "$$(date -Iseconds)" \
+	  > "$(RUN_DIR)/manifest.json"
 
 # Start app in background: write start.iso, start syslog (if available), and launch supervisor.
 start:
@@ -114,6 +121,7 @@ start:
 
 # Stop app on device, stop helpers, wait for supervisor to exit, then clear lock
 stop:
+	@printf "sigterm" > "$(RUN_DIR)/stop.reason"
 	@bash bin/stop-app.sh "$(DEVICE_ID)" "$(BUNDLE_ID)" "$(RUN_DIR)" "$(APP_SCHEME)" || true
 	-@kill "$$(cat $(RUN_DIR)/syslog.pid 2>/dev/null)" 2>/dev/null || true
 	@# Wait for supervisor to finish before clearing lock (prevents race conditions)
@@ -131,6 +139,8 @@ stop:
 	@[ -f "$(RUN_DIR)/stop.iso" ] || date -Iseconds > "$(RUN_DIR)/stop.iso"
 	@date -Iseconds > "$(RUN_DIR)/cooldown.iso"
 	@rm -rf "$(LOCK)"
+	@# Auto-collect unless STOP_NOCOLLECT=1
+	@if [ -z "$$STOP_NOCOLLECT" ]; then $(MAKE) collect; fi
 
 status:
 	@echo "Session dir: $(RUN_DIR)"
@@ -145,13 +155,17 @@ status:
 				echo "pid=$$PID (UNSUPERVISED)"; \
 			fi; \
 		else \
-			echo "not found"; \
+			if [ -f "$(RUN_DIR)/stop.reason" ]; then \
+				echo "STOPPED (BY_AGENT)"; \
+			else \
+				echo "not found"; \
+			fi; \
 		fi; \
 	else \
 		echo "device unavailable"; \
 	fi
-	@# Check for launch failures and show diagnostic
-	@if [ -f "$(RUN_DIR)/supervisor.out" ] && grep -q "ERROR:" "$(RUN_DIR)/supervisor.out" 2>/dev/null; then \
+	@# Check for launch failures only if we didn't intentionally stop
+	@if [ ! -f "$(RUN_DIR)/stop.reason" ] && [ -f "$(RUN_DIR)/supervisor.out" ] && grep -q "ERROR:" "$(RUN_DIR)/supervisor.out" 2>/dev/null; then \
 		echo "Launch status: FAILED"; \
 		if [ -f "$(CONSOLE_LOG)" ] && grep -q "Locked" "$(CONSOLE_LOG)" 2>/dev/null; then \
 			echo "Reason: Device is locked"; \
@@ -165,7 +179,7 @@ status:
 # Always collect unified logs (passwordless via sudo wrapper), artifacts, and windowed crash/Jetsam for [start, stop|now].
 collect:
 	@echo "Collecting iOS device logs for $(DEVICE_ID)…"
-	@bash bin/probe-ios-logging.sh "$(RUN_DIR)" "$(DEVICE_ID)" || true
+	@bash bin/probe-ios-logging.sh "$(RUN_DIR)" "$(DEVICE_ID)" >/dev/null 2>&1 || true
 	@bash bin/collect-logs.sh "$(RUN_DIR)" "$(DEVICE_ID)" "$(BUNDLE_ID)"
 
 tail:
@@ -179,7 +193,43 @@ clean:
 prune:
 	@N=$${N:-10}; ls -1t $(RUN_ROOT)/archive 2>/dev/null | tail -n +$$((N+1)) | while read d; do rm -rf "$(RUN_ROOT)/archive/$$d"; done || true
 
+doctor:
+	@echo "🔬 QuietMic Environment Check"
+	@echo ""
+	@echo "Required tools:"
+	@command -v jq >/dev/null 2>&1 && echo "  ✅ jq" || echo "  ❌ jq (install: brew install jq)"
+	@command -v python3 >/dev/null 2>&1 && echo "  ✅ python3" || echo "  ❌ python3"
+	@command -v xcodegen >/dev/null 2>&1 && echo "  ✅ xcodegen" || echo "  ❌ xcodegen (install: brew install xcodegen)"
+	@command -v xcrun >/dev/null 2>&1 && echo "  ✅ xcrun" || echo "  ❌ xcrun (Xcode not installed)"
+	@echo ""
+	@echo "Sudo wrapper:"
+	@if [ -f /usr/local/sbin/quietmic-log-collect ]; then \
+		echo "  ✅ /usr/local/sbin/quietmic-log-collect"; \
+		sudo -n /usr/local/sbin/quietmic-log-collect --help >/dev/null 2>&1 && \
+			echo "  ✅ passwordless sudo configured" || \
+			echo "  ⚠️  requires password (run ./setup-sudo-wrapper.sh)"; \
+	else \
+		echo "  ❌ /usr/local/sbin/quietmic-log-collect (run ./setup-sudo-wrapper.sh)"; \
+	fi
+	@echo ""
+	@echo "Device connectivity:"
+	@DEVICE=$$(xcrun devicectl list devices --hide-default-columns --columns Identifier --filter 'Platform == "iOS"' 2>/dev/null | tail -n +3 | head -n1); \
+	if [ -n "$$DEVICE" ]; then \
+		DEVICE_NAME=$$(xcrun devicectl list devices --hide-default-columns --columns Name --filter 'Platform == "iOS"' 2>/dev/null | tail -n +3 | head -n1); \
+		DEVICE_STATE=$$(xcrun devicectl list devices --hide-default-columns --columns State --filter 'Platform == "iOS"' 2>/dev/null | tail -n +3 | head -n1); \
+		echo "  ✅ iOS device: $$DEVICE_NAME ($$DEVICE_STATE)"; \
+		echo "     UDID: $$DEVICE"; \
+		xcrun devicectl device info files --device "$$DEVICE" \
+			--domain-type appDataContainer --domain-identifier "$(BUNDLE_ID)" >/dev/null 2>&1 \
+			&& echo "  ✅ App container readable" \
+			|| echo "  ⚠️  App container blocked (device may be locked or app not installed)"; \
+	else \
+		echo "  ❌ No iOS device found"; \
+		echo "     Check USB connection, device trust, and Developer Mode"; \
+	fi
+
 help:
 	@echo "dev [RUN_ID=latest|slug] [DEVICE_ID=…]  → build/install/launch (background)"
+	@echo "doctor                                   → check environment and dependencies"
 	@echo "stop | status | tail | collect | prune | clean"
 	@echo "Default session: runs/latest. With RUN_ID=slug: runs/archive/<slug>."

@@ -28,6 +28,21 @@ func loadAgentRunID() -> String {
     return config.run_id
 }
 
+private func getPersistentLogFileHandle() -> FileHandle? {
+    let fm = FileManager.default
+    let docsURL = fm.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    let logsDir = docsURL.appendingPathComponent("logs")
+    
+    try? fm.createDirectory(at: logsDir, withIntermediateDirectories: true)
+    
+    let logFile = logsDir.appendingPathComponent("app.jsonl")
+    if !fm.fileExists(atPath: logFile.path) {
+        fm.createFile(atPath: logFile.path, contents: nil)
+    }
+    
+    return try? FileHandle(forWritingTo: logFile)
+}
+
 func agentPrint(_ ev: String, _ fields: [String: String] = [:]) {
     let rid = loadAgentRunID()
     var dict = fields
@@ -39,6 +54,14 @@ func agentPrint(_ ev: String, _ fields: [String: String] = [:]) {
        let jsonString = String(data: jsonData, encoding: .utf8) {
         // One line JSON to stdout; devicectl --console captures this.
         print(jsonString)
+        
+        // Also persist to on-device file to survive app restarts
+        if let handle = getPersistentLogFileHandle(),
+           let logLine = (jsonString + "\n").data(using: .utf8) {
+            try? handle.seekToEnd()
+            try? handle.write(contentsOf: logLine)
+            try? handle.close()
+        }
     }
 
     // Also log to OSLog for unified log collection

@@ -52,13 +52,20 @@ SHOW_END="$(python3 -c "import datetime; print(datetime.datetime.fromisoformat('
 
 /usr/bin/log show --archive "$IOS_ARCHIVE" --style ndjson --info --debug \
   --start "$SHOW_START" --end "$SHOW_END" \
-  --predicate 'subsystem IN {"AVFAudio","com.apple.runningboard","com.apple.activitykit"} OR process IN {"mediaserverd","SpringBoard","backboardd","assertiond","diagnosticd"} OR eventMessage CONTAINS[c] "Jetsam" OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
+  --predicate 'subsystem IN {"AVFAudio","com.apple.audio","com.apple.runningboard","com.apple.activitykit"} OR process IN {"mediaserverd","audiomxd","SpringBoard","backboardd","assertiond","diagnosticd"} OR eventMessage CONTAINS[c] "Jetsam" OR processImagePath CONTAINS[c] "'"$BUNDLE_ID"'"' > "$RUN_DIR/unified.jsonl"
 
 # App artifacts
 mkdir -p "$RUN_DIR/artifacts"
 xcrun devicectl device copy from --device "$DEVICE_ID" \
   --domain-type appDataContainer --domain-identifier "$BUNDLE_ID" \
   --source "Documents" --destination "$RUN_DIR/artifacts" || true
+
+# Prefer on-device persistent log if available (survives app restarts)
+DEVICE_LOG="$RUN_DIR/artifacts/logs/app.jsonl"
+if [ -f "$DEVICE_LOG" ] && [ -s "$DEVICE_LOG" ]; then
+  echo "Using persistent on-device log (survives restarts)" >> "$COLLECT_LOG"
+  cp "$DEVICE_LOG" "$RUN_DIR/app_persistent.jsonl"
+fi
 
 # Crash/Jetsam only for this window (filename timestamp filter)
 mkdir -p "$RUN_DIR/systemCrashLogs"
