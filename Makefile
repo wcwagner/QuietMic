@@ -29,6 +29,12 @@ START_ISO       := $(RUN_DIR)/start.iso
 STOP_ISO        := $(RUN_DIR)/stop.iso
 COLLECT_LOG     := $(RUN_DIR)/collect.log
 
+# QuietMic Focus-based recording control
+QM_ON_SHORTCUT  ?= MAC-QM-ON
+QM_OFF_SHORTCUT ?= MAC-QM-OFF
+QM_FOCUS_SETTLE ?= 2
+QM_LOG          := $(RUN_DIR)/qm.log
+
 # Hot-loop build artifacts (always overwritten)
 BUILD_OUT       := build
 BUILD_RAW_LOG   := $(BUILD_OUT)/_latest.raw.log
@@ -36,7 +42,7 @@ BUILD_PRETTY    := $(BUILD_OUT)/_latest.txt
 XCRESULT        := $(BUILD_OUT)/_latest.xcresult
 XCB             := $(shell command -v xcbeautify 2>/dev/null)
 
-.PHONY: dev start stop status collect guard gen build install preseed tail clean prune build-only doctor help
+.PHONY: dev start stop status collect guard gen build install preseed tail clean prune build-only doctor help qm-start qm-stop qm-restart qm-status
 
 dev: guard gen build install preseed start ## Build→install→launch (returns immediately)
 
@@ -234,8 +240,50 @@ doctor:
 		echo "     Check USB connection, device trust, and Developer Mode"; \
 	fi
 
+qm-start:
+	@mkdir -p "$(RUN_DIR)"
+	@command -v shortcuts >/dev/null 2>&1 || { echo "❌ 'shortcuts' CLI not found (open Shortcuts.app once to enable CLI)"; exit 1; }
+	@echo "$$(date -Iseconds) qm-start" >> "$(QM_LOG)"
+	@date -Iseconds > "$(RUN_DIR)/qm.start.iso"
+	@echo "Toggling Focus ON via $(QM_ON_SHORTCUT)…"
+	@shortcuts run "$(QM_ON_SHORTCUT)"
+	@sleep $(QM_FOCUS_SETTLE)
+	@echo "✅ Requested start via Focus (iPhone sync may take a few seconds)."
+	@if [ -n "$$QM_COLLECT" ]; then $(MAKE) -s collect >/dev/null 2>&1 || true; fi
+
+qm-stop:
+	@mkdir -p "$(RUN_DIR)"
+	@command -v shortcuts >/dev/null 2>&1 || { echo "❌ 'shortcuts' CLI not found (open Shortcuts.app once to enable CLI)"; exit 1; }
+	@echo "$$(date -Iseconds) qm-stop" >> "$(QM_LOG)"
+	@date -Iseconds > "$(RUN_DIR)/qm.stop.iso"
+	@echo "Toggling Focus OFF via $(QM_OFF_SHORTCUT)…"
+	@shortcuts run "$(QM_OFF_SHORTCUT)"
+	@sleep $(QM_FOCUS_SETTLE)
+	@echo "✅ Requested stop via Focus (iPhone sync may take a few seconds)."
+	@if [ -n "$$QM_COLLECT" ]; then $(MAKE) -s collect >/dev/null 2>&1 || true; fi
+
+qm-restart:
+	@$(MAKE) qm-stop
+	@sleep 1
+	@$(MAKE) qm-start
+
+qm-status:
+	@mkdir -p "$(RUN_DIR)"
+	@# Best-effort refresh of device logs; ignore failures/no-sudo
+	@$(MAKE) -s collect >/dev/null 2>&1 || true
+	@echo "Session dir: $(RUN_DIR)"
+	@printf "Recording: "
+	@LAST=$$(grep -hE 'INTENT_(START|STOP)_RECORDING' "$(CONSOLE_LOG)" 2>/dev/null | tail -n1 || true); \
+	if echo "$$LAST" | grep -q 'INTENT_START_RECORDING'; then echo "ACTIVE"; \
+	elif echo "$$LAST" | grep -q 'INTENT_STOP_RECORDING'; then echo "INACTIVE"; \
+	else echo "UNKNOWN (no recent INTENT_* markers)"; fi
+	@# Show recent markers for context
+	@grep -hE 'INTENT_(START|STOP)_RECORDING' "$(CONSOLE_LOG)" 2>/dev/null | tail -n3 || true
+	@echo "(Focus sync can be delayed a few seconds; re-run qm-status if uncertain.)"
+
 help:
 	@echo "dev [RUN_ID=latest|slug] [DEVICE_ID=…]  → build/install/launch (background)"
 	@echo "doctor                                   → check environment and dependencies"
+	@echo "qm-start | qm-stop | qm-restart | qm-status → control recording via Focus mode"
 	@echo "stop | status | tail | collect | prune | clean"
 	@echo "Default session: runs/latest. With RUN_ID=slug: runs/archive/<slug>."
