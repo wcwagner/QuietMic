@@ -11,6 +11,10 @@ configFiles:
   Debug: Configs/Debug.xcconfig
   Release: Configs/Release.xcconfig
 
+packages:
+  QuietMicIntents:
+    path: QuietMicIntents
+
 settings:
   base: {}
 
@@ -22,6 +26,22 @@ targets:
     sources:
       - ios/QuietMic/App
       - ios/QuietMic/Features
+    dependencies:
+      - package: QuietMicIntents
+    frameworks:
+      - AppIntents
+    postbuildScripts:
+      - name: Copy QuietMicIntents Metadata
+        script: |
+          set -euo pipefail
+          SRC="${BUILT_PRODUCTS_DIR}/QuietMicIntents.appintents/Metadata.appintents"
+          DEST="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Metadata.appintents"
+          if [ -d "$SRC" ]; then
+            rsync -a --delete "$SRC/" "$DEST/"
+          else
+            echo "warning: AppIntents metadata bundle not found at $SRC" >&2
+          fi
+        shell: /bin/zsh
     resources:
       - ios/QuietMic/Resources
     info:

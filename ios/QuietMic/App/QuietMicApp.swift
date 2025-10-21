@@ -11,6 +11,10 @@ import SwiftData
 @main
 @MainActor
 struct QuietMicApp: App {
+    init() {
+        QuietMicIntentsBindings.configure()
+    }
+
     var sharedModelContainer: ModelContainer = {
         agentPrint("APP_INIT", ["phase": "model_container_setup"])
         let schema = Schema([

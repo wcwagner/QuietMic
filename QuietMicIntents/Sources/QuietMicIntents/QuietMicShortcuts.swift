@@ -1,14 +1,17 @@
 //
 //  QuietMicShortcuts.swift
-//  QuietMic
+//  QuietMicIntents
 //
 
 import AppIntents
 
-struct QuietMicShortcuts: AppShortcutsProvider {
-    static let shortcutTileColor: ShortcutTileColor = .purple
+@available(iOS 26, *)
+public struct QuietMicShortcuts: AppShortcutsProvider {
+    public static let shortcutTileColor: ShortcutTileColor = .purple
 
-    static var appShortcuts: [AppShortcut] {
+    public init() {}
+
+    public static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartRecordingIntent(),
             phrases: [
@@ -18,7 +21,7 @@ struct QuietMicShortcuts: AppShortcutsProvider {
             shortTitle: "Start Recording",
             systemImageName: "mic.fill"
         )
-        
+
         AppShortcut(
             intent: StopRecordingIntent(),
             phrases: [
