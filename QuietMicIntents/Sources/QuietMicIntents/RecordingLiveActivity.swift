@@ -8,8 +8,8 @@
 import ActivityKit
 import Foundation
 
-public struct RecordingActivityAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
+public struct RecordingActivityAttributes: ActivityAttributes, Sendable {
+    public struct ContentState: Codable, Hashable, Sendable {
         public var sessionID: String
         public var elapsedSeconds: Double
 

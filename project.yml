@@ -28,6 +28,7 @@ targets:
       - ios/QuietMic/Features
     dependencies:
       - package: QuietMicIntents
+      - target: QuietMicLiveActivityExtension
     frameworks:
       - AppIntents
     postbuildScripts:
@@ -49,6 +50,7 @@ targets:
       properties:
         NSMicrophoneUsageDescription: "QuietMic records audio locally on-device for quick voice memos"
         UIBackgroundModes: ["audio"]
+        NSSupportsLiveActivities: true
     entitlements:
       path: Configs/QuietMic.entitlements
       properties: {}
@@ -90,3 +92,27 @@ targets:
         TEST_TARGET_NAME: QuietMic
         STRING_CATALOG_GENERATE_SYMBOLS: false
     scheme: {}
+
+  QuietMicLiveActivityExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - ios/QuietMic/LiveActivities/Widget
+    dependencies:
+      - package: QuietMicIntents
+    frameworks:
+      - ActivityKit
+      - SwiftUI
+      - WidgetKit
+    info:
+      path: ios/QuietMic/LiveActivities/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            WKAppBundleIdentifier: com.williamwagner.QuietMic
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_NAME: QuietMicLiveActivityExtension
+        PRODUCT_BUNDLE_IDENTIFIER: com.williamwagner.QuietMic.LiveActivity
