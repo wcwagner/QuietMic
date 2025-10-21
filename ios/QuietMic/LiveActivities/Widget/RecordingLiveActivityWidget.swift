@@ -6,6 +6,7 @@
 //
 
 import ActivityKit
+import AppIntents
 import QuietMicIntents
 import SwiftUI
 import WidgetKit
@@ -30,9 +31,14 @@ struct RecordingLiveActivityWidget: Widget {
                 }
 
                 DynamicIslandExpandedRegion(.bottom) {
-                    RecordingLiveActivityElapsedLabel(elapsedSeconds: context.state.elapsedSeconds)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 8) {
+                        RecordingLiveActivityElapsedLabel(elapsedSeconds: context.state.elapsedSeconds)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        RecordingLiveActivityStopButton()
+                            .controlSize(.small)
+                    }
                 }
             } compactLeading: {
                 Image(systemName: "mic.fill")
@@ -62,6 +68,9 @@ private struct RecordingLiveActivityLockScreenView: View {
             RecordingLiveActivityElapsedLabel(elapsedSeconds: context.state.elapsedSeconds)
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
+
+            RecordingLiveActivityStopButton()
+                .controlSize(.small)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 12)
@@ -100,6 +109,19 @@ private struct RecordingLiveActivityElapsedLabel: View {
     var body: some View {
         Text(elapsedSeconds.formattedRecordingDuration)
             .accessibilityLabel("\(elapsedSeconds.formattedRecordingDuration) elapsed")
+    }
+}
+
+@available(iOS 26, *)
+private struct RecordingLiveActivityStopButton: View {
+    var body: some View {
+        Button(intent: StopRecordingIntent()) {
+            Label("Stop", systemImage: "stop.fill")
+                .font(.subheadline.weight(.semibold))
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.red)
+        .accessibilityLabel("Stop recording")
     }
 }
 
